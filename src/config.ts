@@ -1,27 +1,38 @@
 /**
- * アプリケーション設定
+ * [EN] Application configuration
+ *
+ * [JA] アプリケーション設定
  */
 import path from "path";
 import os from "os";
 
 /**
- * アプリケーション設定
+ * [EN] Application configuration object
+ *
+ * [JA] アプリケーション設定オブジェクト
  */
 export const config = {
   /**
-   * アプリケーション情報
+   * [EN] Application information
+   *
+   * [JA] アプリケーション情報
    */
   app: {
-    name: "YouTube MP3 Downloader",
+    name: "youtube-mp3-server",
     version: "1.0.0",
   },
 
   /**
-   * ダウンロード設定
+   * [EN] Download settings
+   *
+   * [JA] ダウンロード設定
    */
   download: {
     /**
-     * デフォルトの出力ディレクトリ
+     * [EN] Default output directory
+     * Can be overridden with the YOUTUBE_MP3_OUTPUT_DIR environment variable
+     *
+     * [JA] デフォルトの出力ディレクトリ
      * 環境変数 YOUTUBE_MP3_OUTPUT_DIR で上書き可能
      */
     defaultOutputDir:
@@ -29,7 +40,10 @@ export const config = {
       path.join(os.homedir(), "Downloads"),
 
     /**
-     * デフォルトの音声品質
+     * [EN] Default audio quality
+     * Can be overridden with the YOUTUBE_MP3_DEFAULT_QUALITY environment variable
+     *
+     * [JA] デフォルトの音声品質
      * 環境変数 YOUTUBE_MP3_DEFAULT_QUALITY で上書き可能
      */
     defaultAudioQuality:
@@ -37,18 +51,25 @@ export const config = {
       "medium",
 
     /**
-     * 一時ファイルディレクトリ
+     * [EN] Temporary file directory
+     * Can be overridden with the YOUTUBE_MP3_TEMP_DIR environment variable
+     *
+     * [JA] 一時ファイルディレクトリ
      * 環境変数 YOUTUBE_MP3_TEMP_DIR で上書き可能
      */
     tempDir: process.env.YOUTUBE_MP3_TEMP_DIR || os.tmpdir(),
   },
 
   /**
-   * YouTube API設定
+   * [EN] YouTube API settings
+   *
+   * [JA] YouTube API設定
    */
   youtube: {
     /**
-     * youtube-dl-execのオプション
+     * [EN] youtube-dl-exec options
+     *
+     * [JA] youtube-dl-execのオプション
      */
     ytdlOptions: {
       noWarnings: true,

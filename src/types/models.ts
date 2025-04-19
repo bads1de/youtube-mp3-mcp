@@ -1,51 +1,61 @@
 /**
- * モデル関連の型定義
+ * [EN] Model related type definitions
+ *
+ * [JA] モデル関連の型定義
  */
 
 /**
- * 音声品質の種類
+ * [EN] Audio quality types
+ *
+ * [JA] 音声品質の種類
  */
 export type AudioQuality = "low" | "medium" | "high";
 
 /**
- * 音声フォーマットを表すインターフェース
+ * [EN] Interface representing audio format
+ *
+ * [JA] 音声フォーマットを表すインターフェース
  */
 export interface AudioFormat {
-  /** 音声品質 */
+  /** [EN] Audio quality / [JA] 音声品質 */
   quality: AudioQuality;
 
-  /** ビットレート（kbps） */
+  /** [EN] Bitrate (kbps) / [JA] ビットレート（kbps） */
   bitrate: number;
 
-  /** ファイル拡張子 */
+  /** [EN] File extension / [JA] ファイル拡張子 */
   extension: "mp3";
 }
 
 /**
- * YouTubeの動画情報を表すインターフェース
+ * [EN] Interface representing YouTube video information
+ *
+ * [JA] YouTubeの動画情報を表すインターフェース
  */
 export interface YouTubeVideoData {
-  /** 動画ID */
+  /** [EN] Video ID / [JA] 動画ID */
   id: string;
 
-  /** 動画タイトル */
+  /** [EN] Video title / [JA] 動画タイトル */
   title: string;
 
-  /** 動画作者 */
+  /** [EN] Video author / [JA] 動画作者 */
   author: string;
 
-  /** 動画の長さ（秒） */
+  /** [EN] Video duration (seconds) / [JA] 動画の長さ（秒） */
   duration: number;
 
-  /** サムネイルURL */
+  /** [EN] Thumbnail URL / [JA] サムネイルURL */
   thumbnailUrl: string;
 
-  /** 動画URL */
+  /** [EN] Video URL / [JA] 動画URL */
   url: string;
 }
 
 /**
- * ダウンロードタスクのステータス
+ * [EN] Download task status
+ *
+ * [JA] ダウンロードタスクのステータス
  */
 export type DownloadStatus =
   | "pending"
@@ -55,18 +65,20 @@ export type DownloadStatus =
   | "failed";
 
 /**
- * ダウンロードタスクの初期化パラメータ
+ * [EN] Download task initialization parameters
+ *
+ * [JA] ダウンロードタスクの初期化パラメータ
  */
 export interface DownloadTaskParams {
-  /** タスクID */
+  /** [EN] Task ID / [JA] タスクID */
   id: string;
 
-  /** ダウンロード対象の動画 */
+  /** [EN] Video to download / [JA] ダウンロード対象の動画 */
   video: any; // YouTubeVideoクラスの型を使用
 
-  /** 出力音声フォーマット */
+  /** [EN] Output audio format / [JA] 出力音声フォーマット */
   format: AudioFormat;
 
-  /** 出力ファイルパス */
+  /** [EN] Output file path / [JA] 出力ファイルパス */
   outputPath: string;
 }
