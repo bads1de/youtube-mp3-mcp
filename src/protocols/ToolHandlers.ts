@@ -32,13 +32,15 @@ export class ToolHandlers implements IToolHandlers {
       const isValidUrl = await this.youtubeContext.validateUrl(args.url);
       if (!isValidUrl) {
         return {
-          content: [
-            {
-              type: "text",
-              text: "エラー: 無効なYouTube URLです。",
-            },
-          ],
-          isError: true,
+          toolResult: {
+            content: [
+              {
+                type: "text",
+                text: "エラー: 無効なYouTube URLです。",
+              },
+            ],
+            isError: true,
+          },
         };
       }
 
@@ -59,27 +61,31 @@ export class ToolHandlers implements IToolHandlers {
       );
 
       return {
-        content: [
-          {
-            type: "text",
-            text: `
+        toolResult: {
+          content: [
+            {
+              type: "text",
+              text: `
 「${video.title}」のダウンロードが完了しました。
 
 **ファイル**: ${outputPath}
 **品質**: ${quality} (${format.bitrate}kbps)
-          `.trim(),
-          },
-        ],
+            `.trim(),
+            },
+          ],
+        },
       };
     } catch (error) {
       return {
-        content: [
-          {
-            type: "text",
-            text: `エラー: ダウンロードに失敗しました - ${(error as Error).message}`,
-          },
-        ],
-        isError: true,
+        toolResult: {
+          content: [
+            {
+              type: "text",
+              text: `エラー: ダウンロードに失敗しました - ${(error as Error).message}`,
+            },
+          ],
+          isError: true,
+        },
       };
     }
   }
@@ -96,33 +102,39 @@ export class ToolHandlers implements IToolHandlers {
 
       if (success) {
         return {
-          content: [
-            {
-              type: "text",
-              text: `タスクID '${args.taskId}' のダウンロードをキャンセルしました。`,
-            },
-          ],
+          toolResult: {
+            content: [
+              {
+                type: "text",
+                text: `タスクID '${args.taskId}' のダウンロードをキャンセルしました。`,
+              },
+            ],
+          },
         };
       } else {
         return {
-          content: [
-            {
-              type: "text",
-              text: `エラー: タスクID '${args.taskId}' のダウンロードをキャンセルできませんでした。タスクが存在しないか、すでに完了または失敗している可能性があります。`,
-            },
-          ],
-          isError: true,
+          toolResult: {
+            content: [
+              {
+                type: "text",
+                text: `エラー: タスクID '${args.taskId}' のダウンロードをキャンセルできませんでした。タスクが存在しないか、すでに完了または失敗している可能性があります。`,
+              },
+            ],
+            isError: true,
+          },
         };
       }
     } catch (error) {
       return {
-        content: [
-          {
-            type: "text",
-            text: `エラー: キャンセル処理中にエラーが発生しました - ${(error as Error).message}`,
-          },
-        ],
-        isError: true,
+        toolResult: {
+          content: [
+            {
+              type: "text",
+              text: `エラー: キャンセル処理中にエラーが発生しました - ${(error as Error).message}`,
+            },
+          ],
+          isError: true,
+        },
       };
     }
   }

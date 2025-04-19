@@ -26,16 +26,12 @@ export class YouTubeContext implements IYouTubeContext {
   async getVideoInfo(url: string): Promise<YouTubeVideo> {
     try {
       // youtube-dl-execを使用して動画情報を取得
-      const result = await youtubeDl(url, {
+      const info = await youtubeDl(url, {
         dumpSingleJson: true,
         noWarnings: true,
-        noCallHome: true,
         preferFreeFormats: true,
         youtubeSkipDashManifest: true,
-      }).exec();
-
-      // JSONをパース
-      const info = JSON.parse(result.stdout);
+      });
 
       // YouTubeVideoオブジェクトを作成して返す
       return new YouTubeVideo({

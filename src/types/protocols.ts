@@ -1,8 +1,12 @@
 /**
  * プロトコル関連の型定義
  */
-import { AudioQuality } from './models';
-import { IYouTubeContext, IDownloadContext, IFileSystemContext } from './contexts';
+import { AudioQuality } from "./models";
+import {
+  IYouTubeContext,
+  IDownloadContext,
+  IFileSystemContext,
+} from "./contexts";
 
 /**
  * MCPサーバーのインターフェース
@@ -12,12 +16,12 @@ export interface IMCPServer {
    * サーバーを初期化する
    */
   initialize(): Promise<void>;
-  
+
   /**
    * サーバーを起動する
    */
   start(): Promise<void>;
-  
+
   /**
    * サーバーを停止する
    */
@@ -34,13 +38,16 @@ export interface IResourceHandlers {
    * @param params URIパラメータ
    * @returns リソースレスポンス
    */
-  handleVideoInfo(uri: URL, params: { videoId: string }): Promise<{
+  handleVideoInfo(
+    uri: URL,
+    params: { videoId: string }
+  ): Promise<{
     contents: Array<{
       uri: string;
       text: string;
     }>;
   }>;
-  
+
   /**
    * ダウンロード履歴リソースのハンドラー
    * @param uri リソースURI
@@ -52,14 +59,17 @@ export interface IResourceHandlers {
       text: string;
     }>;
   }>;
-  
+
   /**
    * ダウンロードタスクリソースのハンドラー
    * @param uri リソースURI
    * @param params URIパラメータ
    * @returns リソースレスポンス
    */
-  handleDownloadTask(uri: URL, params: { taskId: string }): Promise<{
+  handleDownloadTask(
+    uri: URL,
+    params: { taskId: string }
+  ): Promise<{
     contents: Array<{
       uri: string;
       text: string;
@@ -81,23 +91,27 @@ export interface IToolHandlers {
     quality?: AudioQuality;
     outputPath?: string;
   }): Promise<{
-    content: Array<{
-      type: string;
-      text: string;
-    }>;
-    isError?: boolean;
+    toolResult: {
+      content: Array<{
+        type: string;
+        text: string;
+      }>;
+      isError?: boolean;
+    };
   }>;
-  
+
   /**
    * ダウンロードキャンセルツールのハンドラー
    * @param args ツール引数
    * @returns ツールレスポンス
    */
   handleCancelDownload(args: { taskId: string }): Promise<{
-    content: Array<{
-      type: string;
-      text: string;
-    }>;
-    isError?: boolean;
+    toolResult: {
+      content: Array<{
+        type: string;
+        text: string;
+      }>;
+      isError?: boolean;
+    };
   }>;
 }

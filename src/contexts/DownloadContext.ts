@@ -1,5 +1,4 @@
 import { YouTubeVideo } from "../models/YouTubeVideo";
-import { AudioQualityUtils } from "../models/AudioFormat";
 import { DownloadTask } from "../models/DownloadTask";
 import { FileSystemContext } from "./FileSystemContext";
 import { AudioFormat, IDownloadContext } from "../types";
@@ -80,19 +79,15 @@ export class DownloadContext implements IDownloadContext {
       await youtubeDl(video.url, {
         extractAudio: true,
         audioFormat: format.extension,
-        audioQuality: format.bitrate.toString(),
+        audioQuality: format.bitrate,
         output: task.outputPath,
-        progress: (progress) => {
-          // 進捗を更新
-          const percent = progress.percent || 0;
-          task.updateProgress(percent);
+      });
 
-          // コールバックがあれば呼び出す
-          if (progressCallback) {
-            progressCallback(percent);
-          }
-        },
-      }).exec();
+      // 進捗を更新
+      task.updateProgress(100);
+      if (progressCallback) {
+        progressCallback(100);
+      }
 
       // タスクを完了状態に更新
       task.updateStatus("completed");

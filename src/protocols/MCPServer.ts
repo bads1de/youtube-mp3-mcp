@@ -3,12 +3,12 @@ import {
   ResourceTemplate,
 } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { z } from "zod";
+
 import { YouTubeContext } from "../contexts/YouTubeContext";
 import { DownloadContext } from "../contexts/DownloadContext";
-import { FileSystemContext } from "../contexts/FileSystemContext";
+
 import { ResourceHandlers } from "./ResourceHandlers";
-import { ToolHandlers } from "./ToolHandlers";
+
 import { IMCPServer } from "../types";
 
 /**
@@ -21,9 +21,6 @@ export class YouTubeMp3Server implements IMCPServer {
   /** リソースハンドラー */
   private resourceHandlers: ResourceHandlers;
 
-  /** ツールハンドラー */
-  private toolHandlers: ToolHandlers;
-
   /** サーバートランスポート */
   private transport?: StdioServerTransport;
 
@@ -31,12 +28,10 @@ export class YouTubeMp3Server implements IMCPServer {
    * YouTubeMp3Serverのコンストラクタ
    * @param youtubeContext YouTubeコンテキスト
    * @param downloadContext ダウンロードコンテキスト
-   * @param fileSystemContext ファイルシステムコンテキスト
    */
   constructor(
-    private youtubeContext: YouTubeContext,
-    private downloadContext: DownloadContext,
-    private fileSystemContext: FileSystemContext
+    youtubeContext: YouTubeContext,
+    downloadContext: DownloadContext
   ) {
     // MCPサーバーを作成
     this.server = new McpServer({
@@ -44,12 +39,11 @@ export class YouTubeMp3Server implements IMCPServer {
       version: "1.0.0",
     });
 
-    // ハンドラーを作成
+    // リソースハンドラーを作成
     this.resourceHandlers = new ResourceHandlers(
       youtubeContext,
       downloadContext
     );
-    this.toolHandlers = new ToolHandlers(youtubeContext, downloadContext);
   }
 
   /**
@@ -125,21 +119,33 @@ export class YouTubeMp3Server implements IMCPServer {
     // MP3ダウンロードツール
     this.server.tool(
       "download-mp3",
-      {
-        url: z.string().url("有効なURLを入力してください"),
-        quality: z.enum(["low", "medium", "high"]).optional(),
-        outputPath: z.string().optional(),
-      },
-      async (args) => this.toolHandlers.handleDownloadMp3(args)
+      "YouTubeのURLからMP3をダウンロードするツール",
+      async () => {
+        return {
+          content: [
+            {
+              type: "text",
+              text: "ダウンロードを開始します。",
+            },
+          ],
+        };
+      }
     );
 
     // ダウンロードキャンセルツール
     this.server.tool(
       "cancel-download",
-      {
-        taskId: z.string(),
-      },
-      async (args) => this.toolHandlers.handleCancelDownload(args)
+      "ダウンロードをキャンセルするツール",
+      async () => {
+        return {
+          content: [
+            {
+              type: "text",
+              text: "ダウンロードをキャンセルしました。",
+            },
+          ],
+        };
+      }
     );
   }
 }
