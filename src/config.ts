@@ -1,35 +1,48 @@
 /**
  * アプリケーション設定
  */
+import path from "path";
+import os from "os";
+
+/**
+ * アプリケーション設定
+ */
 export const config = {
   /**
    * アプリケーション情報
    */
   app: {
-    name: 'YouTube MP3 Downloader',
-    version: '1.0.0'
+    name: "YouTube MP3 Downloader",
+    version: "1.0.0",
   },
-  
+
   /**
    * ダウンロード設定
    */
   download: {
     /**
      * デフォルトの出力ディレクトリ
+     * 環境変数 YOUTUBE_MP3_OUTPUT_DIR で上書き可能
      */
-    defaultOutputDir: './downloads',
-    
+    defaultOutputDir:
+      process.env.YOUTUBE_MP3_OUTPUT_DIR ||
+      path.join(os.homedir(), "Downloads"),
+
     /**
-     * 同時ダウンロード数の上限
+     * デフォルトの音声品質
+     * 環境変数 YOUTUBE_MP3_DEFAULT_QUALITY で上書き可能
      */
-    maxConcurrentDownloads: 3,
-    
+    defaultAudioQuality:
+      (process.env.YOUTUBE_MP3_DEFAULT_QUALITY as "low" | "medium" | "high") ||
+      "medium",
+
     /**
-     * ダウンロード履歴の最大保持数
+     * 一時ファイルディレクトリ
+     * 環境変数 YOUTUBE_MP3_TEMP_DIR で上書き可能
      */
-    maxHistoryItems: 100
+    tempDir: process.env.YOUTUBE_MP3_TEMP_DIR || os.tmpdir(),
   },
-  
+
   /**
    * YouTube API設定
    */
@@ -39,9 +52,8 @@ export const config = {
      */
     ytdlOptions: {
       noWarnings: true,
-      noCallHome: true,
       preferFreeFormats: true,
-      youtubeSkipDashManifest: true
-    }
-  }
+      youtubeSkipDashManifest: true,
+    },
+  },
 };

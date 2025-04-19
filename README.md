@@ -40,6 +40,35 @@ npm run build
 
 ## 使用方法
 
+### 環境変数の設定
+
+以下の環境変数を設定することで、アプリケーションの動作をカスタマイズできます：
+
+- `YOUTUBE_MP3_OUTPUT_DIR`: MP3ファイルのデフォルト出力ディレクトリ（デフォルト: `~/Downloads`）
+- `YOUTUBE_MP3_DEFAULT_QUALITY`: デフォルトの音質設定（`low`, `medium`, `high`のいずれか、デフォルト: `medium`）
+- `YOUTUBE_MP3_TEMP_DIR`: 一時ファイルの保存先（デフォルト: システムの一時ディレクトリ）
+
+### Claude Desktopでの設定
+
+`claude_desktop_config.json`に以下のように設定します：
+
+```json
+{
+  "mcpServers": {
+    "youtube-mp3": {
+      "command": "node",
+      "args": ["path/to/youtube-mp3-mcp/dist/index.js"],
+      "env": {
+        "YOUTUBE_MP3_OUTPUT_DIR": "/path/to/your/music/folder",
+        "YOUTUBE_MP3_DEFAULT_QUALITY": "high"
+      }
+    }
+  }
+}
+```
+
+### アプリケーションの起動
+
 ```bash
 # アプリケーションの起動
 npm start
@@ -50,33 +79,28 @@ npm run dev
 
 ## アーキテクチャ
 
-このプロジェクトはModel-Context-Protocol (MCP) アーキテクチャに基づいて設計されています：
+このプロジェクトはシンプルなサービス指向アーキテクチャを採用し、Model-Context-Protocol (MCP) を実装しています：
 
-1. **Model**: データと業務ロジックを担当
+1. **サービス層**: アプリケーションの主要機能を提供
 
-   - YouTubeVideo: YouTube動画の情報を表すクラス
-   - DownloadTask: ダウンロードタスクを表すクラス
-   - AudioFormat: 音声フォーマットを表すインターフェース
+   - YouTubeService: YouTube動画情報の取得やURL検証を行う
+   - DownloaderService: 動画から音声をダウンロードし、MP3への変換を行う
 
-2. **Context**: モデルとプロトコル間の橋渡しを行う
+2. **MCP層**: Model Context Protocolの実装
 
-   - YouTubeContext: YouTube APIとの通信を管理
-   - DownloadContext: ダウンロード処理を管理
-   - FileSystemContext: ファイルシステムとの相互作用を管理
+   - リソース: YouTube動画情報を提供
+   - ツール: MP3ダウンロード機能を提供
 
-3. **Protocol**: 外部とのインターフェースを提供
+3. **型定義**: アプリケーション全体で使用される型を定義
 
-   - MCPServer: MCPサーバーの実装
-   - ResourceHandlers: リソースハンドラーの実装
-   - ToolHandlers: ツールハンドラーの実装
+   - youtube.ts: YouTube関連の型定義
+   - downloader.ts: ダウンロード関連の型定義
 
-4. **Types**: 型定義を集約
-   - models.ts: モデル関連の型定義
-   - contexts.ts: コンテキスト関連の型定義
-   - protocols.ts: プロトコル関連の型定義
-   - utils.ts: ユーティリティ関連の型定義
+4. **設定管理**: アプリケーションの設定を管理
+   - 環境変数からの設定読み込み
+   - ダウンロードパスのカスタマイズ
 
-詳細なアーキテクチャ設計については [architecture.md](./architecture.md) を参照してください。
+このシンプルなアーキテクチャにより、コードの理解と保守が容易になり、拡張性も向上します。
 
 ## 開発
 
@@ -98,13 +122,13 @@ Model-Context-Protocolを活用して、以下のリソースとツールを提�
 **リソース**:
 
 - `youtube://{videoId}/info`: YouTube動画の情報を提供
-- `downloads://history`: ダウンロード履歴を提供
-- `downloads://task/{taskId}`: 特定のダウンロードタスクの情報を提供
 
 **ツール**:
 
 - `download-mp3`: YouTubeのURLからMP3をダウンロード
-- `cancel-download`: ダウンロードをキャンセル
+  - `url`: YouTube動画のURL (必須)
+  - `quality`: 音質設定 (`low`, `medium`, `high`) (オプション、デフォルトは環境変数から読み込み)
+  - `outputDir`: 出力ディレクトリ (オプション、デフォルトは環境変数から読み込み)
 
 ## 注意事項
 
