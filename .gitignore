@@ -7,6 +7,8 @@ dist/
 # Coverage directory
 coverage/
 
+
+
 # Environment variables
 .env
 .env.local
